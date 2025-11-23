@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# install networking tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends iproute2 iputils-ping tcpdump && \
+    rm -rf /var/lib/apt/lists/*
+
+# scapy for your spoof script
+RUN pip install --no-cache-dir scapy
+
+# workspace
+WORKDIR /opt/sniff
+RUN mkdir -p /opt/sniff/scripts /captures
+
+# copy entrypoint script and make it executable
+CMD ["sleep", "infinity"]

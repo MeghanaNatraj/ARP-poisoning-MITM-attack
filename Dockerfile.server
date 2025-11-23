@@ -1,0 +1,17 @@
+
+FROM python:3.11-slim
+
+WORKDIR /flaskapp
+
+
+COPY flaskapp/ /flaskapp/
+
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+EXPOSE 5000
+
+
+CMD ["python", "app.py"]
+

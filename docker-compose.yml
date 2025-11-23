@@ -1,0 +1,56 @@
+version: '3.8'
+
+networks:
+  hwnet:
+    driver: bridge
+    ipam: 
+      config: 
+        - subnet: 172.28.0.0/16
+
+services:
+  server-a:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: server
+    networks:
+      hwnet:
+        ipv4_address: 172.28.0.10
+        mac_address: "02:42:ac:11:00:10"
+    command: ["python", "app.py"]
+
+
+  client-b:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: client
+    privileged: true
+    cap_add:
+      - NET_RAW # Needed for tcpdump in some environments
+      - NET_ADMIN # Needed for tcpdump in some environments
+    networks:
+      hwnet:
+        ipv4_address: 172.28.0.11
+        mac_address: "02:42:ac:11:00:11"
+    volumes:
+      - ./captures:/captures # host directory to persist pcaps
+    command: /bin/bash /script.sh
+
+## New container goes here
+
+  sniff:
+    build:
+      context: .
+      dockerfile: Dockerfile.sniff
+    container_name: sniff
+    privileged: true          # raw sockets in container
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    networks:
+      hwnet:
+        ipv4_address: 172.28.0.12
+        mac_address: "02:42:ac:11:00:12"
+    volumes:
+      - ./scripts:/opt/sniff/scripts

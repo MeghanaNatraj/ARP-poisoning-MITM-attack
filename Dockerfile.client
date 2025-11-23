@@ -1,0 +1,30 @@
+FROM ubuntu:22.04
+
+
+
+
+RUN apt update 
+RUN apt-get install -y net-tools
+RUN apt-get install -y iputils-ping
+
+RUN apt-get install -y curl
+RUN apt install -y nmap
+RUN apt install -y iproute2
+
+## Cleanup you can ignore
+RUN apt clean
+RUN rm -rf /var/lib/apt/lists/*
+## Cleanup ends
+
+RUN apt-get update && apt-get install -y tcpdump && rm -rf /var/lib/apt/lists/*
+
+# copy entrypoint script and make it executable
+COPY client_entrypoint.sh /usr/local/bin/client_entrypoint.sh
+RUN chmod +x /usr/local/bin/client_entrypoint.sh
+
+# default command to run script.sh
+ENTRYPOINT ["/usr/local/bin/client_entrypoint.sh"]
+CMD ["/bin/bash", "/script.sh"]
+
+WORKDIR /
+COPY script.sh /script.sh
