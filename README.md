@@ -1,4 +1,4 @@
-# CS468 HW2 – Docker, Networking, and ARP Spoofing
+# Network Security HW2 – Docker, Networking, and ARP Spoofing
 
 This repository packages the starter environment for HW2. It uses Docker and docker-compose to stand up a small lab where a client repeatedly hits a Flask server and a third container performs ARP spoofing and packet capture. Use this README as a guide to build, run, and gather the evidence the assignment asks for.
 
